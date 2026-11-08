@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server";
 import { links } from "@/lib/profile";
-import { getClicksCollection } from "@/lib/mongodb";
+import { getClickCounts, getClicksCollection } from "@/lib/mongodb";
+
+// GET이 정적으로 캐시되지 않도록 항상 동적 실행
+export const dynamic = "force-dynamic";
+
+/** 모든 링크의 현재 클릭 수를 한 번에 반환: { [id]: count } */
+export async function GET() {
+  const counts = await getClickCounts();
+  return NextResponse.json(counts, { headers: { "Cache-Control": "no-store" } });
+}
 
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);

@@ -1,16 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import type { LinkItem } from "@/lib/profile";
 
-type Props = { link: LinkItem; initialCount: number };
+type Props = { link: LinkItem; count: number; onClick: () => void };
 
-export default function LinkCard({ link, initialCount }: Props) {
-  const [count, setCount] = useState(initialCount);
-
+export default function LinkCard({ link, count, onClick }: Props) {
   function handleClick() {
     // 페이지 이동과 무관하게 전송되도록 keepalive 사용
-    setCount((c) => c + 1);
+    onClick();
     fetch("/api/click", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
